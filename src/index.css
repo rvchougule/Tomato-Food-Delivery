@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  /* padding-inline: 20px; */
+  min-height: 100vh;
+}
+
+:root {
+  font-size: 16px;
+  --max-width: 1000px;
+  --text-color: #5f5e5e;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 800px) {
+  :root {
+    font-size: 12px;
+  }
+}
