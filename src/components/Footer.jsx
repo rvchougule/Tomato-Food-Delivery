@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer id="footer">
       <div className="footer-container">
         <div className="footer-disription">
           <img src={assets.logo} alt="" />

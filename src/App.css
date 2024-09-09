@@ -7,6 +7,10 @@ header {
   padding-block: 10px;
   margin-inline: auto;
   padding-inline: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  backdrop-filter: blur(50px);
 }
 
 header .logo-container {
@@ -45,6 +49,7 @@ header .head-right img {
   margin-inline: auto;
   margin-block: 20px;
   padding-inline: 20px;
+  scroll-margin-top: 80px;
 }
 .hero-container {
   height: 40vw;
@@ -125,6 +130,10 @@ header .head-right img {
   color: #898989;
 }
 
+.menu-circle {
+  border: 3px solid #ff623f;
+  border-radius: 50%;
+}
 /* top dishes */
 .top-dishes {
   margin-block: 20px;
@@ -143,6 +152,7 @@ header .head-right img {
   max-width: 230px;
   border-radius: 15px;
   box-shadow: 2px 2px 16px 4px #ccc;
+  position: relative;
 }
 .card .dish-image {
   height: 200px;
@@ -151,6 +161,35 @@ header .head-right img {
 
 .card .dish-image img {
   width: 100%;
+}
+.card .cart-add {
+  position: absolute;
+  top: 130px;
+  right: 10px;
+}
+
+.cart-add .add_icon_white {
+  width: 40px;
+  cursor: pointer;
+}
+
+.cart-adder {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart-adder span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ff623f;
+}
+
+.cart-adder .add_icon_green,
+.cart-adder .remove_icon_red {
+  width: 20px;
+  cursor: pointer;
 }
 
 .card .dish-info {

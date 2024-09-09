@@ -1,6 +1,22 @@
-import { assets, food_list, menu_list } from "../assets/assets";
+import { useState } from "react";
+import { assets, menu_list } from "../assets/assets";
+import { useSelector } from "react-redux";
+import { getAllItems } from "../store/slices/itemsSlice";
+import Card from "../components/card";
 
 export const Home = () => {
+  const productsList = useSelector(getAllItems);
+  const [selectedMenu, setSelectedMenu] = useState("");
+
+  const handleClick = (menu_name) => {
+    setSelectedMenu(menu_name);
+  };
+
+  const filteredFoodList = selectedMenu
+    ? productsList.filter((foodItem) =>
+        foodItem.category.includes(selectedMenu)
+      )
+    : productsList;
   return (
     <>
       <section className="hero-section" id="hero-section">
@@ -20,7 +36,7 @@ export const Home = () => {
             <button>View Menu</button>
           </div>
         </div>
-        <div className="menu-explorer">
+        <div className="menu-explorer" id="menu-explorer">
           <h1>Explore our menu</h1>
           <p>
             Choose from diverse menu featuring a delectable array of dishes
@@ -31,8 +47,16 @@ export const Home = () => {
           <div className="menu-container">
             {menu_list.map(({ menu_name, menu_image }, index) => {
               return (
-                <div className="food-menu" key={index}>
-                  <img src={menu_image} alt={menu_name} />
+                <div
+                  className="food-menu"
+                  key={index}
+                  onClick={() => handleClick(menu_name)}
+                >
+                  <img
+                    className={selectedMenu === menu_name ? "menu-circle" : ""}
+                    src={menu_image}
+                    alt={menu_name}
+                  />
                   <h4>{menu_name}</h4>
                 </div>
               );
@@ -42,29 +66,21 @@ export const Home = () => {
         <div className="top-dishes">
           <h1>Top dishes near you</h1>
           <div className="card-container">
-            {food_list.map((foodItem) => {
+            {filteredFoodList.map((foodItem) => {
               return (
-                <div className="card" key={foodItem._id}>
-                  <div className="dish-image">
-                    <img src={foodItem.image} alt="" />
-                  </div>
-                  {/* <div className="cart-add">
-                    <img src={assets.add_icon_white} alt="add_icon_white" />
-                  </div> */}
-                  <div className="dish-info">
-                    <span className="food-name">{foodItem.name}</span>
-                    <div className="rating-container">
-                      <img src={assets.rating_starts} alt="" />
-                    </div>
-                    <p>{foodItem.description}</p>
-                    <span className="price">${foodItem.price}</span>
-                  </div>
-                </div>
+                <Card
+                  key={foodItem._id}
+                  itemId={foodItem._id}
+                  image={foodItem.image}
+                  name={foodItem.name}
+                  description={foodItem.description}
+                  price={foodItem.price}
+                />
               );
             })}
           </div>
         </div>
-        <div className="download-app">
+        <div className="download-app" id="download-app">
           <h1>
             For Better Experience Download <br />
             Tomato App

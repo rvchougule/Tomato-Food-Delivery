@@ -3,7 +3,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home } from "./components/Home.jsx";
+
+import { store } from "./store/index.js";
+import { Provider } from "react-redux";
+import { Home } from "./pages/Home.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>
 );

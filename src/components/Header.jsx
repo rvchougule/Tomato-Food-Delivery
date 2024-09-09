@@ -1,6 +1,13 @@
-import { NavLink } from "react-router-dom";
-import { assets } from "../assets/assets.js";
+import { useDispatch } from "react-redux";
+import { assets, food_list } from "../assets/assets.js";
+import { useEffect } from "react";
+import { updateAllItems } from "../store/slices/itemsSlice";
 export const Header = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateAllItems(food_list));
+  }, []);
   return (
     <>
       <header>
@@ -8,18 +15,18 @@ export const Header = () => {
           <img src={assets.logo} alt="" />
         </div>
         <nav>
-          <NavLink className="nav-link" to="/">
+          <a className="nav-link" href="#hero-section">
             Home
-          </NavLink>
-          <NavLink className="nav-link" to="/menu">
+          </a>
+          <a className="nav-link" href="#menu-explorer">
             Menu
-          </NavLink>
-          <NavLink className="nav-link" to="/mobileapp">
+          </a>
+          <a className="nav-link" href="#download-app">
             Mobile app
-          </NavLink>
-          <NavLink className="nav-link" to="/contactus">
+          </a>
+          <a className="nav-link" href="#footer">
             Contact Us
-          </NavLink>
+          </a>
         </nav>
         <div className="head-right">
           <img src={assets.search_icon} alt="search_icon" />
