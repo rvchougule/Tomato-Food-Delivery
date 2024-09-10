@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { assets, food_list } from "../assets/assets.js";
 import { useEffect } from "react";
 import { updateAllItems } from "../store/slices/itemsSlice";
+import { Link } from "react-router-dom";
 export const Header = () => {
   const dispatch = useDispatch();
 
@@ -11,26 +12,31 @@ export const Header = () => {
   return (
     <>
       <header>
-        <div className="logo-container">
-          <img src={assets.logo} alt="" />
-        </div>
+        <Link to="/">
+          <div className="logo-container">
+            <img src={assets.logo} alt="" />
+          </div>
+        </Link>
         <nav>
-          <a className="nav-link" href="#hero-section">
+          <Link className="nav-link" to="/#hero-section">
             Home
-          </a>
-          <a className="nav-link" href="#menu-explorer">
+          </Link>
+          <Link className="nav-link" to="/#menu-explorer">
             Menu
-          </a>
-          <a className="nav-link" href="#download-app">
+          </Link>
+          <Link className="nav-link" to="/#download-app">
             Mobile app
-          </a>
-          <a className="nav-link" href="#footer">
+          </Link>
+          <Link className="nav-link" to="/#footer">
             Contact Us
-          </a>
+          </Link>
         </nav>
         <div className="head-right">
           <img src={assets.search_icon} alt="search_icon" />
-          <img src={assets.basket_icon} alt="basket_icon" />
+          <Link to="/cart-basket">
+            <img src={assets.basket_icon} alt="basket_icon" />
+          </Link>
+
           <img src={assets.profile_icon} alt="profile_icon" />
         </div>
       </header>

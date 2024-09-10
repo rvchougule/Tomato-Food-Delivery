@@ -18,6 +18,7 @@ const slice = createSlice({
     },
     removeCartItem(state, action) {
       const existingItemIndex = findItemIndex(state.list, action);
+      console.log(existingItemIndex);
       state.list.splice(existingItemIndex, 1);
     },
     increaseCartItemQuantity(state, action) {
@@ -36,24 +37,24 @@ const slice = createSlice({
   },
 });
 
-const getItems = (state) => state.items.list;
+export const getItems = (state) => state.items.list;
 export const getCartItemsList = (state) => state.cartItems.list;
 
-export const getCartItems = createSelector(
-  [getItems, getCartItemsList],
-  (items, cartItems) => {
-    return cartItems
-      .map(({ itemId, quantity }) => {
-        const cartItem = items.find((item) => item.itemId === itemId);
-        return { ...cartItem, quantity };
-      })
-      .filter(({ title }) => title);
-  }
-);
+// const getCartItems = createSelector(
+//   [getItems, getCartItemsList],
+//   (items, cartItems) => {
+//     return cartItems
+//       .map(({ itemId, quantity }) => {
+//         const cartItem = items.find((item) => item._id == itemId);
+//         return { ...cartItem, quantity };
+//       })
+//       .filter(({ name }) => name);
+//   }
+// );
 
-export const getAllCartItems = createSelector(getCartItems, (cartItems) =>
-  cartItems.slice()
-);
+// export const getAllCartItems = createSelector(getCartItems, (cartItems) =>
+//   cartItems.slice()
+// );
 
 export const getCartLoading = (state) => state.cartItems.loading;
 export const getCartError = (state) => state.cartItems.error;

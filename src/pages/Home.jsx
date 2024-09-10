@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assets, menu_list } from "../assets/assets";
 import { useSelector } from "react-redux";
 import { getAllItems } from "../store/slices/itemsSlice";
 import Card from "../components/card";
+import { useLocation } from "react-router-dom";
 
 export const Home = () => {
   const productsList = useSelector(getAllItems);
   const [selectedMenu, setSelectedMenu] = useState("");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      const element = document.getElementById(hash.substring(1)); // remove the '#' symbol
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   const handleClick = (menu_name) => {
     setSelectedMenu(menu_name);
