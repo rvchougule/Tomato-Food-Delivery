@@ -11,6 +11,7 @@ export const Home = () => {
 
   const location = useLocation();
 
+  // Specific section navigation
   useEffect(() => {
     const hash = location.hash;
     if (hash) {
@@ -22,7 +23,11 @@ export const Home = () => {
   }, [location]);
 
   const handleClick = (menu_name) => {
-    setSelectedMenu(menu_name);
+    if (menu_name === selectedMenu) {
+      setSelectedMenu("");
+    } else {
+      setSelectedMenu(menu_name);
+    }
   };
 
   const filteredFoodList = selectedMenu
