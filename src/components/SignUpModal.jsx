@@ -9,7 +9,7 @@ import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUpModal({ isOpen, setIsOpen }) {
-  const [signIn, setSignIn] = useState(false);
+  const [signIn, setSignIn] = useState(true);
   const [signInUser, setSignInUser] = useState({ email: "", password: "" });
   const [user, setUser] = useState({
     user_name: "",
@@ -25,7 +25,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
         signInUser.email,
         signInUser.password
       );
-      console.log("User logged in successfully");
+      // console.log("User logged in successfully");
       setSignInUser({ email: "", password: "" });
     } catch (error) {
       console.log("error", error.message);
@@ -37,14 +37,14 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
     try {
       await createUserWithEmailAndPassword(auth, user.email, user.password);
       const authUser = auth.currentUser;
-      console.log(authUser);
+      // console.log(authUser);
       if (authUser) {
         await setDoc(doc(db, "Users", authUser.uid), {
           user_name: user.user_name,
           email: user.email,
         });
       }
-      console.log("User Registered Successfully");
+      // console.log("User Registered Successfully");
       setUser({
         user_name: "",
         email: "",

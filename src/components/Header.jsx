@@ -6,21 +6,24 @@ import { Link } from "react-router-dom";
 import SignUpModal from "./SignUpModal.jsx";
 import { auth, db } from "../firebase.js";
 import { doc, getDoc } from "firebase/firestore";
+import "./Header.css";
+
 export const Header = () => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
+  const [profileBox, setProfileBox] = useState(false);
 
   const fetchUserData = async () => {
     auth.onAuthStateChanged(async (user) => {
-      console.log(user);
-      const docRef = doc(db, "Users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserDetails(docSnap.data());
-        console.log(docSnap.data());
-      } else {
-        console.log("User is not logged in");
+      if (user) {
+        const docRef = doc(db, "Users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserDetails(docSnap.data());
+        } else {
+          console.log("User is not logged in");
+        }
       }
     });
   };
@@ -29,6 +32,16 @@ export const Header = () => {
     dispatch(updateAllItems(food_list));
     fetchUserData();
   }, []);
+
+  async function handleLogout() {
+    try {
+      await auth.signOut();
+      setUserDetails(null);
+      console.log("User logged out successfully!");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  }
   return (
     <>
       <header>
@@ -61,7 +74,29 @@ export const Header = () => {
               Sign in
             </span>
           ) : (
-            <img src={assets.profile_icon} alt="profile_icon" />
+            <img
+              src={assets.profile_icon}
+              alt="profile_icon"
+              onClick={() => setProfileBox(true)}
+            />
+          )}
+          {profileBox && (
+            <div className="profile_box">
+              <span onClick={() => setProfileBox(false)}>
+                Rohan Chougule{" "}
+                <h6 onClick={() => setProfileBox(false)}>&#10006;</h6>
+              </span>
+              <span onClick={() => setProfileBox(false)}>Orders</span>
+              <span onClick={() => setProfileBox(false)}>
+                Log out{" "}
+                <img
+                  className="logout"
+                  src={assets.logout_icon}
+                  alt=""
+                  onClick={handleLogout}
+                />
+              </span>
+            </div>
           )}
 
           <SignUpModal isOpen={isOpen} setIsOpen={setIsOpen} />
