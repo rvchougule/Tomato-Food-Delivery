@@ -10,7 +10,7 @@ import {
 } from "../store/slices/cartSliceFirebase";
 import { signInModelOpen } from "../store/slices/userSlice";
 
-export default function Card({ itemId, image, name, description, price }) {
+export const Card = function ({ itemId, image, name, description, price }) {
   const [mouseEnter, setMouseEnter] = useState(false);
   const dispatch = useDispatch();
   const cartItemsList = useSelector(getCartFirebaseItemsList);
@@ -88,4 +88,4 @@ export default function Card({ itemId, image, name, description, price }) {
       </div>
     </div>
   );
-}
+};

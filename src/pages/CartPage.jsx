@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import "./CartPage.css";
 import { useEffect, useState } from "react";
-import CartTable from "../components/CartTable";
+import { CartTable } from "../components/CartTable";
 import { getCartFirebaseItemsList } from "../store/slices/cartSliceFirebase";
 import { getAllItems } from "../store/slices/itemsSlice";
 import PlaceOrder from "../components/PlaceOrder";

@@ -11,7 +11,7 @@ import {
   deleteCartItem,
 } from "../store/slices/cartSliceFirebase";
 
-export default function CartTable({ cartItemsList }) {
+export const CartTable = function ({ cartItemsList }) {
   const dispatch = useDispatch();
   const [mouseEnter, setMouseEnter] = useState(false);
   const handleMouseEnter = () => {
@@ -103,4 +103,4 @@ export default function CartTable({ cartItemsList }) {
       )}
     </div>
   );
-}
+};

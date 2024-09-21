@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { assets, menu_list } from "../assets/assets";
+import { Card } from "../components/Card";
+
 import { useSelector } from "react-redux";
 import { getAllItems } from "../store/slices/itemsSlice";
-import Card from "../components/card";
+
 import { Link, useLocation } from "react-router-dom";
 
 export const Home = () => {
