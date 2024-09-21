@@ -1,0 +1,183 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { selectUserDetails } from "./userSlice";
+
+// add CartItem to firestore
+// export const addCartItemToFirestore = createAsyncThunk(
+//   "cartFirebase/addCartItemToFirestore",
+//   async (itemId,) => {
+//     // const state = thunkAPI.getState();
+
+//     const cartItemDocSnap = await getDoc(doc(db, "CartItems", itemId));
+
+//     if (cartItemDocSnap.exists()) {
+//       await setDoc(doc(db, "CartItems", itemId), {
+//         itemId,
+//         quantity: cartItemDocSnap.data().quantity + 1,
+//       });
+//     } else {
+//       await setDoc(doc(db, "CartItems", itemId), {
+//         itemId,
+//         quantity: 1,
+//       });
+//     }
+//     return {
+//       itemId,
+//       quantity: cartItemDocSnap.exists()
+//         ? cartItemDocSnap.data().quantity + 1
+//         : 1,
+//     };
+//   }
+// );
+export const addCartItemToFirestore = createAsyncThunk(
+  "cartFirebase/addCartItemToFirestore",
+  async (itemId, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const userDetails = selectUserDetails(state);
+    const cartRef = doc(db, "Carts", userDetails.uid);
+    const cartSnap = await getDoc(cartRef);
+
+    if (cartSnap.exists()) {
+      const cartItems = cartSnap.data().cartItems || {};
+      const currentQuantity = cartItems[itemId] || 0;
+
+      // Update or add the item
+      cartItems[itemId] = currentQuantity + 1;
+
+      await setDoc(cartRef, { cartItems }, { merge: true });
+      return { uid: userDetails.uid, itemId, quantity: cartItems[itemId] };
+    } else {
+      // Create a new cart for the user if it doesn't exist
+      await setDoc(cartRef, { cartItems: { [itemId]: 1 } });
+      return { uid: userDetails.uid, itemId, quantity: 1 };
+    }
+  }
+);
+
+// decrease cart item quantity
+export const decreaseCartItemToFirestore = createAsyncThunk(
+  "cartFirebase/decreaseCartItemToFirestore",
+  async (itemId, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    const cartItemDocSnap = await getDoc(doc(db, "CartItems", itemId));
+
+    if (cartItemDocSnap.exists()) {
+      const newQuantity = cartItemDocSnap.data().quantity - 1;
+
+      if (newQuantity > 0) {
+        await setDoc(doc(db, "CartItems", itemId), {
+          itemId,
+          quantity: newQuantity,
+        });
+      } else {
+        dispatch(deleteCartItem(itemId));
+      }
+      return { itemId, quantity: newQuantity };
+    }
+  }
+);
+
+// fetch cart items
+export const fetchCartItems = createAsyncThunk(
+  "cartFirebase/fetchCartItems",
+  async () => {
+    const querySnapshot = await getDocs(collection(db, "CartItems"));
+    const items = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+    }));
+    return items;
+  }
+);
+
+// delete cart item
+export const deleteCartItem = createAsyncThunk(
+  "cartFirebase/deleteCartItem",
+  async (itemId) => {
+    await deleteDoc(doc(db, "CartItems", itemId));
+    return itemId;
+  }
+);
+
+// delete all cart items
+export const deleteAllCartItems = createAsyncThunk(
+  "cartFirebase/deleteAllCartItems",
+  async () => {
+    const cartItems = await getDocs(collection(db, "CartItems"));
+    for (var snap of cartItems.docs) {
+      await deleteDoc(doc(db, "CartItems", snap.id));
+    }
+    return [];
+  }
+);
+
+// update cart Item
+export const updateCartItem = createAsyncThunk(
+  "cartFirebase/updateCartItem",
+  async (editedCartItem) => {
+    const cartRef = doc(db, "CartItems", editedCartItem.id);
+    await updateDoc(cartRef, editedCartItem.book);
+    return editedCartItem;
+  }
+);
+
+const findItemIndex = (state, action) =>
+  state.findIndex((cartItem) => cartItem.itemId === action.payload.itemId);
+
+const slice = createSlice({
+  name: "cartFirebase",
+  initialState: {
+    loading: false,
+    list: [],
+    error: "",
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
+        state.list = action.payload;
+      })
+      .addCase(addCartItemToFirestore.fulfilled, (state, action) => {
+        const existingItemIndex = findItemIndex(state.list, action);
+        if (existingItemIndex !== -1)
+          state.list[existingItemIndex].quantity += 1;
+        else state.list.push({ ...action.payload });
+      })
+      .addCase(decreaseCartItemToFirestore.fulfilled, (state, action) => {
+        const item = state.list.find(
+          (cartItem) => cartItem.itemId === action.payload.itemId
+        );
+        if (item) {
+          item.quantity = action.payload.quantity;
+        }
+      })
+      .addCase(deleteCartItem.fulfilled, (state, action) => {
+        state.list = state.list.filter(
+          (cartItem) => cartItem.itemId !== action.payload
+        );
+      })
+      .addCase(deleteAllCartItems.fulfilled, (state) => {
+        state.list = [];
+      })
+      .addCase(updateCartItem.fulfilled, (state, action) => {
+        const { id, book } = action.payload;
+        const itemIndex = state.list.findIndex((item) => item.id === id);
+        if (itemIndex !== -1) {
+          state.list[itemIndex] = { ...state.list[itemIndex], ...book };
+        }
+      });
+  },
+});
+
+export const getItems = (state) => state.items.list;
+export const getCartFirebaseItemsList = (state) => state.cartFirebaseItems.list;
+
+export default slice.reducer;

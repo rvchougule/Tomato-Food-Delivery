@@ -1,0 +1,58 @@
+.modal_container {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+  z-index: 20;
+}
+
+.modal_container.modal_open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.place_order {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 350px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.place_order input,
+.place_order textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.place_order input::placeholder,
+.place_order textarea::placeholder {
+  font-size: 12px;
+}
+
+.place_order h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.place_order button {
+  width: 100%;
+  padding: 8px 10px;
+  background-color: #ea6715;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}

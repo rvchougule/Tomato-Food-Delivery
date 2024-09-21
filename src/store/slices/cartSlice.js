@@ -1,22 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { createSlice } from "@reduxjs/toolkit";
 
 const findItemIndex = (state, action) =>
   state.findIndex((cartItem) => cartItem.itemId === action.payload.itemId);
-
-// export const fetchCartItemsData = createAsyncThunk(
-//   'cart/fetchCartItems',
-//   async () => {
-//     try {
-//       const docRef = doc(db, "cart_items", );
-//       const response = await getDoc()
-//       return response.json()
-//     } catch (err) {
-//       throw err
-//     }
-//   }
-// )
 
 const slice = createSlice({
   name: "cart",

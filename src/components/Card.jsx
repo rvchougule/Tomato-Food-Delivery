@@ -2,16 +2,21 @@
 import { useState } from "react";
 import { assets } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
-  addCartItem,
-  decreaseCartItemQuantity,
-  getCartItemsList,
-} from "../store/slices/cartSlice";
+  addCartItemToFirestore,
+  decreaseCartItemToFirestore,
+  getCartFirebaseItemsList,
+} from "../store/slices/cartSliceFirebase";
+import { signInModelOpen } from "../store/slices/userSlice";
 
 export default function Card({ itemId, image, name, description, price }) {
   const [mouseEnter, setMouseEnter] = useState(false);
   const dispatch = useDispatch();
-  const cartItemsList = useSelector(getCartItemsList);
+  const cartItemsList = useSelector(getCartFirebaseItemsList);
+  const { isAuthenticated } = useSelector((state) => state.user);
+
+  // console.log(cartItemsList);
 
   const cartItem = cartItemsList.find((item) => {
     return item.itemId === itemId;
@@ -41,7 +46,12 @@ export default function Card({ itemId, image, name, description, price }) {
               src={assets.remove_icon_red}
               alt="remove_icon_red"
               onClick={() => {
-                dispatch(decreaseCartItemQuantity({ itemId }));
+                // dispatch(decreaseCartItemQuantity({ itemId }));
+                if (isAuthenticated) {
+                  dispatch(decreaseCartItemToFirestore(itemId));
+                } else {
+                  dispatch(signInModelOpen());
+                }
               }}
             />
             <span className="cart-item-count">{cartItem?.quantity || 0}</span>
@@ -50,7 +60,12 @@ export default function Card({ itemId, image, name, description, price }) {
               src={assets.add_icon_green}
               alt="add_icon_green"
               onClick={() => {
-                dispatch(addCartItem({ itemId }));
+                // dispatch(addCartItem({ itemId }));
+                if (isAuthenticated) {
+                  dispatch(addCartItemToFirestore(itemId));
+                } else {
+                  dispatch(signInModelOpen());
+                }
               }}
             />
           </div>

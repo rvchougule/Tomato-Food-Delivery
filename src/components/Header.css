@@ -1,4 +1,10 @@
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  backdrop-filter: blur(50px);
+}
+.header_container {
   max-width: var(--max-width);
   display: flex;
   flex-direction: row;
@@ -7,12 +13,7 @@ header {
   padding-block: 10px;
   margin-inline: auto;
   padding-inline: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  backdrop-filter: blur(50px);
 }
-
 header .logo-container {
   width: 100px;
 }

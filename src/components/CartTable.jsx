@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useDispatch } from "react-redux";
 import "./CartTables.css";
-import {
-  decreaseCartItemQuantity,
-  increaseCartItemQuantity,
-  removeCartItem,
-} from "../store/slices/cartSlice";
+
 import { assets } from "../assets/assets";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  addCartItemToFirestore,
+  decreaseCartItemToFirestore,
+  deleteCartItem,
+} from "../store/slices/cartSliceFirebase";
 
 export default function CartTable({ cartItemsList }) {
   const dispatch = useDispatch();
@@ -55,7 +56,8 @@ export default function CartTable({ cartItemsList }) {
                           src={assets.remove_icon_red}
                           alt="remove_icon_red"
                           onClick={() => {
-                            dispatch(decreaseCartItemQuantity({ itemId: _id }));
+                            // dispatch(decreaseCartItemQuantity({ itemId: _id }));
+                            dispatch(decreaseCartItemToFirestore(_id));
                           }}
                         />
                         <span>{quantity}</span>
@@ -64,7 +66,8 @@ export default function CartTable({ cartItemsList }) {
                           src={assets.add_icon_green}
                           alt="add_icon_green"
                           onClick={() => {
-                            dispatch(increaseCartItemQuantity({ itemId: _id }));
+                            // dispatch(increaseCartItemQuantity({ itemId: _id }));
+                            dispatch(addCartItemToFirestore(_id));
                           }}
                         />
                       </div>
@@ -77,7 +80,8 @@ export default function CartTable({ cartItemsList }) {
                 <td>
                   <span
                     onClick={() => {
-                      dispatch(removeCartItem({ itemId: _id }));
+                      // dispatch(removeCartItem({ itemId: _id }));
+                      dispatch(deleteCartItem(_id));
                     }}
                   >
                     &#10006;

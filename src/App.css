@@ -33,13 +33,14 @@
   font-size: 12px;
 }
 
-.hero-header button {
+.hero-header a {
   padding-block: 10px;
   padding-inline: 20px;
   color: #5f5e5e;
   border: none;
   border-radius: 50px;
   font-weight: 500;
+  background-color: white;
 }
 
 .menu-explorer {

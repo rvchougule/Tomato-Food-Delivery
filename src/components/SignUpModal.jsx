@@ -1,14 +1,15 @@
 import { createPortal } from "react-dom";
 import "./SignUpModal.css";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+  loginUserToFirebase,
+  registerUserToFirebase,
+  signInModelClose,
+} from "../store/slices/userSlice";
 
-export default function SignUpModal({ isOpen, setIsOpen }) {
+export default function SignUpModal() {
+  const dispatch = useDispatch();
   const [signIn, setSignIn] = useState(true);
   const [signInUser, setSignInUser] = useState({ email: "", password: "" });
   const [user, setUser] = useState({
@@ -16,42 +17,42 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
     email: "",
     password: "",
   });
+  const { isOpen } = useSelector((state) => state.user);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        signInUser.email,
-        signInUser.password
+      dispatch(
+        loginUserToFirebase({
+          email: signInUser.email,
+          password: signInUser.password,
+        })
       );
-      // console.log("User logged in successfully");
+
       setSignInUser({ email: "", password: "" });
     } catch (error) {
-      console.log("error", error.message);
+      console.log("Login error-", error.message);
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, user.email, user.password);
-      const authUser = auth.currentUser;
-      // console.log(authUser);
-      if (authUser) {
-        await setDoc(doc(db, "Users", authUser.uid), {
-          user_name: user.user_name,
+      dispatch(
+        registerUserToFirebase({
           email: user.email,
-        });
-      }
-      // console.log("User Registered Successfully");
+          password: user.password,
+          user_name: user.user_name,
+        })
+      );
+
       setUser({
         user_name: "",
         email: "",
         password: "",
       });
     } catch (error) {
-      console.log(error.message);
+      console.log("registerError-", error.message);
     }
   };
   const handleSignInChange = (e) => {
@@ -65,7 +66,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
   return createPortal(
     <div
       className={`modal_container ${isOpen ? "modal_open" : ""}`}
-      onClick={() => setIsOpen(false)}
+      onClick={() => dispatch(signInModelClose())}
     >
       {!signIn ? (
         //   Sign Up form
@@ -78,7 +79,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
         >
           <div className="head-title">
             <span>Sign Up</span>
-            <span onClick={() => setIsOpen(false)}>&#10006;</span>
+            <span onClick={() => dispatch(signInModelClose())}>&#10006;</span>
           </div>
           <input
             type="text"
@@ -104,7 +105,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
             value={user.password}
             onChange={handleRegisterChange}
           />
-          <button type="submit" onClick={() => setIsOpen(false)}>
+          <button type="submit" onClick={() => dispatch(signInModelClose())}>
             Submit
           </button>
           <div className="terms_block">
@@ -134,7 +135,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
         >
           <div className="head-title">
             <span>Login </span>
-            <span onClick={() => setIsOpen(false)}>&#10006;</span>
+            <span onClick={() => dispatch(signInModelClose())}>&#10006;</span>
           </div>
           <input
             type="text"
@@ -152,7 +153,7 @@ export default function SignUpModal({ isOpen, setIsOpen }) {
             value={signInUser.password}
             onChange={handleSignInChange}
           />
-          <button type="submit" onClick={() => setIsOpen(false)}>
+          <button type="submit" onClick={() => dispatch(signInModelClose())}>
             Submit
           </button>
           <div className="terms_block">

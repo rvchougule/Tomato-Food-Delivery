@@ -3,7 +3,7 @@ import { assets, menu_list } from "../assets/assets";
 import { useSelector } from "react-redux";
 import { getAllItems } from "../store/slices/itemsSlice";
 import Card from "../components/card";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const Home = () => {
   const productsList = useSelector(getAllItems);
@@ -51,7 +51,9 @@ export const Home = () => {
               mission is to satisfy your cravings and elevate your dining
               experience, one delicious meal at a time.
             </p>
-            <button>View Menu</button>
+            <Link className="view_menu" to="/#menu-explorer">
+              View menu
+            </Link>
           </div>
         </div>
         <div className="menu-explorer" id="menu-explorer">
