@@ -5,7 +5,7 @@ import CartTable from "../components/CartTable";
 import { getCartFirebaseItemsList } from "../store/slices/cartSliceFirebase";
 import { getAllItems } from "../store/slices/itemsSlice";
 import PlaceOrder from "../components/PlaceOrder";
-function CartPage() {
+export const CartPage = function () {
   const items = useSelector(getAllItems);
   const cartItems = useSelector(getCartFirebaseItemsList);
 
@@ -76,6 +76,4 @@ function CartPage() {
       />
     </>
   );
-}
-
-export default CartPage;
+};
