@@ -23,9 +23,9 @@ export const Header = () => {
   useEffect(() => {
     dispatch(fetchUserProfile());
     dispatch(updateAllItems(food_list));
-    if (isAuthenticated) {
-      dispatch(fetchCartItems());
-    }
+    dispatch(fetchCartItems(userDetails?.uid));
+
+    // console.log("User profile updated");
   }, [isAuthenticated, dispatch]);
 
   return (

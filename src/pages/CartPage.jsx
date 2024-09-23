@@ -11,6 +11,7 @@ export const CartPage = function () {
 
   const [cartItemsList, setCartItemsList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   const deliveryFees = 5;
 
@@ -54,7 +55,15 @@ export const CartPage = function () {
                 </tr>
               </tbody>
             </table>
-            <button className="checkout_btn" onClick={() => setIsOpen(true)}>
+            <button
+              className={` ${
+                !isAuthenticated ? "checkout_btn_false" : "checkout_btn"
+              }`}
+              onClick={isAuthenticated ? () => setIsOpen(true) : null}
+              title={`${
+                !isAuthenticated ? "Please add items to the cart first" : ""
+              }`}
+            >
               Place the Order
             </button>
           </div>

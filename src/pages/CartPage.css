@@ -68,6 +68,21 @@
   cursor: pointer;
 }
 
+.checkout_btn_false {
+  max-width: 250px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(128, 125, 124);
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  box-shadow: 2px 4px 8px 1px #ccc;
+  cursor: not-allowed;
+  /* pointer-events: none; */
+}
+
 .promocode_container {
   display: flex;
   flex-direction: column;

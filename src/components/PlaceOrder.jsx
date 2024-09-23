@@ -14,8 +14,8 @@ export default function PlaceOrder({
 }) {
   const { userDetails } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
-    name: userDetails.user_name,
-    email: userDetails.email,
+    name: userDetails?.user_name || "",
+    email: userDetails?.email || "",
     address: "",
     mobile: "",
     note: "",
@@ -88,13 +88,13 @@ export default function PlaceOrder({
           type="text"
           id="user_name"
           name="user_name"
-          value={userDetails.user_name}
+          value={userDetails?.user_name || ""}
           onChange={handleChange}
         />
         <input
           type="email"
           name="email"
-          value={userDetails.email}
+          value={userDetails?.email || ""}
           onChange={handleChange}
         />
         <input

@@ -157,7 +157,11 @@ const slice = createSlice({
     list: [],
     error: "",
   },
-  reducers: {},
+  reducers: {
+    emptyCart(state) {
+      state.list = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCartItems.fulfilled, (state, action) => {
@@ -202,5 +206,6 @@ const slice = createSlice({
 
 export const getItems = (state) => state.items.list;
 export const getCartFirebaseItemsList = (state) => state.cartFirebaseItems.list;
+export const { emptyCart } = slice.actions;
 
 export default slice.reducer;

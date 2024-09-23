@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { toast } from "react-toastify";
+import { emptyCart } from "./cartSliceFirebase";
 
 // thunk for login
 export const loginUserToFirebase = createAsyncThunk(
@@ -84,9 +85,19 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 
-// sign out user
-export const signOut = createAsyncThunk("user/signOut", async () => {
-  return await auth.signOut();
+export const signOut = createAsyncThunk("user/signOut", async (_, thunkAPI) => {
+  const { dispatch } = thunkAPI;
+  try {
+    // Sign out the user
+    await auth.signOut();
+
+    // Optionally dispatch another action, e.g., clearing user data
+    dispatch(emptyCart());
+
+    return "User signed out successfully";
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Failed to sign out", error);
+  }
 });
 
 // Slice to handle user authentication and profile state
