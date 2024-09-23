@@ -129,6 +129,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(registerUserToFirebase.fulfilled, (state) => {
+        state.isAuthenticated = true;
         state.loading = false;
         state.error = null;
         toast.success("User signed up successfully!");
